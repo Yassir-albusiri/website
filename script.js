@@ -170,7 +170,7 @@ function goBackToDateSelection() {
 // ===========================
 function buildWhatsAppUrl() {
     const phoneNumber = '966533556031';
-    const message = `Hey babe! I said YES to our date! ❤️ We are doing ${selectedActivity} on ${selectedDate} at ${selectedTime}. Love you!`;
+    const message = `Hey babe! I said YES to our date!, We are doing ${selectedActivity} on ${selectedDate} at ${selectedTime}. Love you!`;
     return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 }
 
