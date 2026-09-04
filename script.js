@@ -5,12 +5,12 @@ function showSection(sectionId) {
     document.querySelectorAll('.section').forEach(section => {
         section.classList.remove('active');
     });
-
+    
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
         targetSection.classList.add('active');
     }
-
+    
     if (sectionId === 'success-screen') {
         sendWhatsAppMessage();
     }
@@ -26,20 +26,18 @@ const noButton = document.getElementById('no-button');
 function evadeNoButton() {
     noButtonClickCount++;
     noButton.textContent = noButtonTexts[noButtonClickCount % noButtonTexts.length];
-
-    // تحويل الزر ليكون حراً في كامل الشاشة
+    
     noButton.style.position = 'fixed';
     noButton.style.zIndex = '9999';
-
-    // حساب أبعاد الشاشة الحقيقية مع ترك هامش أمان 20 بكسل
+    
     const btnWidth = noButton.offsetWidth;
     const btnHeight = noButton.offsetHeight;
     const maxX = window.innerWidth - btnWidth - 20;
     const maxY = window.innerHeight - btnHeight - 20;
-
+    
     const randomX = Math.max(20, Math.random() * maxX);
     const randomY = Math.max(20, Math.random() * maxY);
-
+    
     noButton.style.left = randomX + 'px';
     noButton.style.top = randomY + 'px';
 }
@@ -47,7 +45,7 @@ function evadeNoButton() {
 if (noButton) {
     noButton.addEventListener('mouseover', evadeNoButton);
     noButton.addEventListener('touchstart', function(e) {
-        e.preventDefault(); // يمنع النقر في الجوال ويجبره على الهروب
+        e.preventDefault(); 
         evadeNoButton();
     });
 }
@@ -100,10 +98,10 @@ function showModal() {
     document.getElementById('time-grid').classList.add('hidden');
     document.getElementById('back-button').classList.add('hidden');
     document.getElementById('date-grid').classList.remove('hidden');
-
+    
     const dateGrid = document.getElementById('date-grid');
     dateGrid.innerHTML = '';
-
+    
     dates.forEach(date => {
         const btn = document.createElement('button');
         btn.className = 'btn-date';
@@ -111,7 +109,7 @@ function showModal() {
         btn.onclick = () => selectDate(date.value);
         dateGrid.appendChild(btn);
     });
-
+    
     document.getElementById('scheduling-modal').classList.add('active');
 }
 
@@ -119,19 +117,19 @@ function generateTimeSlots() {
     const times = [];
     let hour = 15; // 3 PM
     let minute = 0;
-
-    for (let i = 0; i <= 24; i++) { // 25 slots from 3 PM to 3 AM
+    
+    for (let i = 0; i <= 24; i++) { 
         let displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
         let ampm = hour >= 12 && hour < 24 ? 'PM' : 'AM';
-
+        
         times.push(`${displayHour}:${minute === 0 ? '00' : '30'} ${ampm}`);
-
+        
         minute += 30;
         if (minute === 60) {
             minute = 0;
             hour++;
         }
-        if (hour === 24) hour = 0; // Reset at midnight
+        if (hour === 24) hour = 0; 
     }
     return times;
 }
@@ -139,12 +137,12 @@ function generateTimeSlots() {
 function selectDate(date) {
     selectedDate = date;
     document.getElementById('date-grid').classList.add('hidden');
-
+    
     const timeGrid = document.getElementById('time-grid');
     timeGrid.innerHTML = '';
     timeGrid.classList.remove('hidden');
     document.getElementById('back-button').classList.remove('hidden');
-
+    
     const times = generateTimeSlots();
     times.forEach(time => {
         const btn = document.createElement('button');
@@ -168,15 +166,34 @@ function goBackToDateSelection() {
 }
 
 // ===========================
-// WHATSAPP INTEGRATION
+// WHATSAPP INTEGRATION & SAFARI FIX
 // ===========================
-function sendWhatsAppMessage() {
+function buildWhatsAppUrl() {
     const phoneNumber = '966533556031';
-    const message = `Hey Babe! I said YES to our date! ❤️ We are doing ${selectedActivity} on ${selectedDate} at ${selectedTime}. Love you!`;
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    const message = `Hey babe! I said YES to our date! ❤️ We are doing ${selectedActivity} on ${selectedDate} at ${selectedTime}. Love you!`;
+    return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+}
 
-    // يتم التأخير قليلاً لتستمتع بشاشة "Yaaay" قبل الانتقال للواتساب
+function sendWhatsAppMessage() {
+    const whatsappUrl = buildWhatsAppUrl();
+    
+    // محاولة التوجيه التلقائي المباشر (Redirect) لتفادي سياسات مانع الإعلانات
     setTimeout(() => {
-        window.open(whatsappUrl, '_blank');
+        window.location.href = whatsappUrl;
     }, 1500);
+
+    // إظهار زر الطوارئ بعد 2.5 ثانية إذا قام Safari بإحباط التوجيه التلقائي
+    setTimeout(() => {
+        const fallbackText = document.getElementById('fallback-text');
+        const fallbackBtn = document.getElementById('fallback-btn');
+        if (fallbackText && fallbackBtn) {
+            fallbackText.classList.remove('hidden');
+            fallbackBtn.classList.remove('hidden');
+        }
+    }, 2500);
+}
+
+// دالة منفصلة مخصصة لزر الطوارئ للتحويل اليدوي بدون مؤقتات
+function forceSendWhatsAppMessage() {
+    window.location.href = buildWhatsAppUrl();
 }
