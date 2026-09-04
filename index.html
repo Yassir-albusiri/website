@@ -7,74 +7,79 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app-container">
-    <!-- Main Card -->
-    <div class="card">
-        <!-- Section 1: Intro Screen -->
-        <section id="intro-screen" class="section active">
-            <div class="section-content">
-                <p class="intro-text">Hey my love, I've been meaning to ask you something...</p>
-                <button class="btn btn-primary" onclick="showSection('proposal-screen')">Tell me ❤️</button>
-            </div>
-        </section>
+    <div class="app-container">
+        <!-- Main Card -->
+        <div class="card">
+            <!-- Section 1: Intro Screen -->
+            <section id="intro-screen" class="section active">
+                <div class="section-content">
+                    <p class="intro-text">Hey my love, I've been meaning to ask you something...</p>
+                    <button class="btn btn-primary" onclick="showSection('proposal-screen')">Tell me ❤️</button>
+                </div>
+            </section>
 
-        <!-- Section 2: Proposal Screen -->
-        <section id="proposal-screen" class="section">
-            <div class="section-content">
-                <p class="proposal-text">Will you go on an online date with me, my love?</p>
-                <div class="button-group">
-                    <!-- تم إصلاح المسار هنا ليتجه للأنشطة -->
-                    <button class="btn btn-primary" onclick="showSection('activity-screen')">Yes, of course! ❤️</button>
-                    <button id="no-button" class="btn btn-secondary">No</button>
+            <!-- Section 2: Proposal Screen -->
+            <section id="proposal-screen" class="section">
+                <div class="section-content">
+                    <p class="proposal-text">Will you go on an online date with me, my love?</p>
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="showSection('activity-screen')">Yes, of course! ❤️</button>
+                        <button id="no-button" class="btn btn-secondary">No</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Activity Screen -->
+            <section id="activity-screen" class="section">
+                <div class="section-content">
+                    <p class="activity-text">What should we do on our date, gorgeous?</p>
+                    <div class="activity-buttons">
+                        <button class="btn btn-activity" onclick="selectActivity('Fortnite & Chill')">Fortnite & Chill</button>
+                        <button class="btn btn-activity" onclick="selectActivity('Roblox')">Roblox</button>
+                        <button class="btn btn-activity" onclick="selectActivity('Cozy Movie Night')">Cozy Movie Night</button>
+                        <button class="btn btn-activity" onclick="selectActivity('Gaming + Movie Combo')">Gaming + Movie Combo</button>
+                        <button class="btn btn-activity" onclick="showCustomActivityInput()">Other (You decide, my love!)</button>
+                    </div>
+                    
+                    <!-- Hidden Custom Input Section -->
+                    <div id="custom-activity-section" class="hidden">
+                        <input type="text" id="custom-activity-input" class="custom-input" placeholder="Tell me what you'd like to do...">
+                        <button class="btn btn-primary mt-3" onclick="submitCustomActivity()">Next</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Scheduling Modal (Overlay Popup) -->
+            <div id="scheduling-modal" class="modal">
+                <div class="modal-content">
+                    <p class="modal-text">When are you free for me, my love? 🕒</p>
+                    
+                    <!-- Date Selection Grid -->
+                    <div id="date-grid" class="date-time-grid"></div>
+                    
+                    <!-- Time Selection Grid (Hidden until date is selected) -->
+                    <div id="time-grid" class="date-time-grid hidden"></div>
+                    
+                    <!-- Back Button (Shown when viewing times) -->
+                    <button id="back-button" class="btn btn-secondary back-button hidden" onclick="goBackToDateSelection()">← Back to Dates</button>
                 </div>
             </div>
-        </section>
 
-        <!-- Section 3: Activity Screen -->
-        <section id="activity-screen" class="section">
-            <div class="section-content">
-                <p class="activity-text">What should we do on our date, gorgeous?</p>
-                <div class="activity-buttons">
-                    <button class="btn btn-activity" onclick="selectActivity('Fortnite & Chill')">Fortnite & Chill</button>
-                    <button class="btn btn-activity" onclick="selectActivity('Roblox')">Roblox</button>
-                    <button class="btn btn-activity" onclick="selectActivity('Cozy Movie Night')">Cozy Movie Night</button>
-                    <button class="btn btn-activity" onclick="selectActivity('Gaming + Movie Combo')">Gaming + Movie Combo</button>
-                    <button class="btn btn-activity" onclick="showCustomActivityInput()">Other (You decide, my love!)</button>
+            <!-- Section 5: Success Screen -->
+            <section id="success-screen" class="section">
+                <div class="section-content">
+                    <p class="success-text">Yaaay! I can't wait, my love! ❤️</p>
+                    
+                    <!-- Fallback Button (Hidden initially, shows if Safari blocks redirect) -->
+                    <p id="fallback-text" class="hidden" style="color: #666; font-size: 0.9rem; margin-top: 20px;">If you are not redirected automatically...</p>
+                    <button id="fallback-btn" class="btn btn-primary mt-3 hidden" onclick="forceSendWhatsAppMessage()">
+                        Send Message 💌
+                    </button>
                 </div>
-
-                <!-- Hidden Custom Input Section -->
-                <div id="custom-activity-section" class="hidden">
-                    <input type="text" id="custom-activity-input" class="custom-input" placeholder="Tell me what you'd like to do...">
-                    <button class="btn btn-primary mt-3" onclick="submitCustomActivity()">Next</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 4: Scheduling Modal (Overlay Popup) -->
-        <div id="scheduling-modal" class="modal">
-            <div class="modal-content">
-                <p class="modal-text">When are you free for me, my love? 🕒</p>
-
-                <!-- Date Selection Grid -->
-                <div id="date-grid" class="date-time-grid"></div>
-
-                <!-- Time Selection Grid (Hidden until date is selected) -->
-                <div id="time-grid" class="date-time-grid hidden"></div>
-
-                <!-- Back Button (Shown when viewing times) -->
-                <button id="back-button" class="btn btn-secondary back-button hidden" onclick="goBackToDateSelection()">← Back to Dates</button>
-            </div>
+            </section>
         </div>
-
-        <!-- Section 5: Success Screen -->
-        <section id="success-screen" class="section">
-            <div class="section-content">
-                <p class="success-text">Yaaay! I can't wait, my love! ❤️</p>
-            </div>
-        </section>
     </div>
-</div>
 
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
